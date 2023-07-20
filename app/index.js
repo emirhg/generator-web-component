@@ -53,7 +53,7 @@ const PROMPTS = [
   },
   {
     name: 'includeTemplate',
-    when: isPolymer,
+//    when: isPolymer,
     type: 'confirm',
     message: 'Will your element need a shadow DOM template?',
     default: true
@@ -103,9 +103,14 @@ class GeneratorWebComponent extends Yeoman {
     const { name } = this.props;
 
     // Write & rename element src
+/*    this.fs.copyTpl(*/
+      /*this.templatePath('element.html'),*/
+      /*this.destinationPath(`${name}.html`),*/
+      /*this*/
+    /*);*/
     this.fs.copyTpl(
-      this.templatePath('element.html'),
-      this.destinationPath(`${name}.html`),
+      this.templatePath('element.js'),
+      this.destinationPath(`${name}.js`),
       this
     );
 
@@ -123,7 +128,7 @@ class GeneratorWebComponent extends Yeoman {
 
     // Write everything else
     this.fs.copyTpl(
-      glob.sync(this.templatePath('!(element.html|element-test.html)'), { dot: true }),
+      glob.sync(this.templatePath('!(element.js|element.html|element-test.html)'), { dot: true }),
       this.destinationPath(),
       this
     );
