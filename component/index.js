@@ -2,6 +2,7 @@ const Yeoman = require('yeoman-generator');
 const path = require('path');
 const mkdirp = require('mkdirp');
 const glob = require('glob');
+const fs = require('fs');
 
 function isStandalone(props) {
   return props.type === 'standalone';
@@ -104,16 +105,20 @@ class GeneratorWebComponent extends Yeoman {
     this.props.class = generateClassName(name);
 
     //Ensure component is in its own directory if standalone
+
+    const baseDir= this.config.get("rootDirectory");
+
     if (type === 'standalone' && path.basename(this.destinationPath()) !== name) {
       this.log(`Your component should be in a '${name}' folder, I'll create it for you`);
-      mkdirp(name);
-      this.destinationRoot(this.destinationPath(name));
+      this.props.outputDir = path.join(baseDir,name);
+      mkdirp(this.props.outputDir);
+      //this.destinationRoot(this.destinationPath(name));
     }
   }
 
   writing() {
-    const { name } = this.props;
 
+    const { name } = this.props;
     // Write & rename element src
     /*
      *this.fs.copyTpl(
@@ -124,7 +129,7 @@ class GeneratorWebComponent extends Yeoman {
      */
     this.fs.copyTpl(
       this.templatePath('element.js'),
-      this.destinationPath(`${name}.js`),
+      this.destinationPath(path.join(this.props.outputDir, `${name}.js`)),
       this
     );
 
@@ -145,9 +150,10 @@ class GeneratorWebComponent extends Yeoman {
     // Write everything else
     this.fs.copyTpl(
       glob.sync(this.templatePath('!(element.html|element.js|element-test.html)'), { dot: true }),
-      this.destinationPath(),
+      this.destinationPath(path.join(this.props.outputDir)),
       this
     );
+
   }
 
   /*install() {
