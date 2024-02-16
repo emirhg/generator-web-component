@@ -142,11 +142,13 @@ class GeneratorWebComponent extends Yeoman {
     }
 
     // Write & rename element test
-    this.fs.copyTpl(
-      this.templatePath("element-test.html"),
-      this.destinationPath(`test/${name}.html`),
-      this
-    );
+    /*
+     *this.fs.copyTpl(
+     *  this.templatePath("element-test.html"),
+     *  this.destinationPath(`test/${name}.html`),
+     *  this
+     *);
+     */
 
     // Write everything else
     this.fs.copyTpl(
