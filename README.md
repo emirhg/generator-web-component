@@ -13,9 +13,7 @@ Polymer support removed.
 
 - [Features](#features)
 - [Installation & usage](#installation--usage)
-- [Components for apps](#components-for-apps)
-- [Standalone components](#standalone-components)
-- [Todo](#todo)
+- [Test](#test)
 
 ## Features
 
