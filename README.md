@@ -1,8 +1,8 @@
-# Web Component Generator [![NPM version][npm-badge]][npm-url]
+# Web Component Generator
 
 Quickly scaffold lightweight web components with [Yeoman][yeoman], with just what's needed and none of the cruft. Built against the v1 Web Components spec.
 
-madeleineostoja/generator-web-component was archived in 2000
+Fork from madeleineostoja/generator-web-component archived in 2000
 
 Modular Web Component definition. JavaScript and CSS are implemented different in splitted files.
 Polymer support removed.
@@ -39,3 +39,4 @@ $ yo web-component ${NEW_COMPONENT_TAG_TWO_WORDS_MINIMUM}
 ## Test
 
 And index.html is included to load the component
+
