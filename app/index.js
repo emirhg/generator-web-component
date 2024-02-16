@@ -1,111 +1,138 @@
-const Yeoman = require('yeoman-generator');
-const path = require('path');
-const mkdirp = require('mkdirp');
-const glob = require('glob');
+const Yeoman = require("yeoman-generator");
+const path = require("path");
+const mkdirp = require("mkdirp");
+const glob = require("glob");
+const fs = require("fs");
 
 function isStandalone(props) {
-  return props.type === 'standalone';
+  return props.type === "standalone";
 }
 
 function isPolymer(props) {
-  return props.framework === 'polymer';
+  return props.framework === "polymer";
 }
 
 function generateClassName(name) {
-  return name.split('-').reduce((previous, part) => {
+  return name.split("-").reduce((previous, part) => {
     return previous + part.charAt(0).toUpperCase() + part.slice(1);
-  }, '');
+  }, "");
 }
 
 const PROMPTS = [
   {
-    name: 'type',
-    type: 'list',
+    name: "type",
+    type: "list",
     choices: [
-      { name: 'Standalone', value: 'standalone' },
-      { name: 'Part of an app', value: 'naked' }
+      { name: "Standalone", value: "standalone" },
+      { name: "Part of an app", value: "naked" },
     ],
     required: true,
-    message: 'Is this a standalone element, or part of an app?'
+    message: "Is this a standalone element, or part of an app?",
   },
   {
-    name: 'name',
-    type: 'input',
+    name: "name",
+    type: "input",
     required: true,
-    message: 'Give it a tag name (min two words separated by dashes)',
-    validate: str => /^([a-z])(?!.*[<>])(?=.*-).+$/.test(str)
+    message: "Give it a tag name (min two words separated by dashes)",
+    validate: (str) => /^([a-z])(?!.*[<>])(?=.*-).+$/.test(str),
   },
   {
-    name: 'description',
+    name: "description",
     when: isStandalone,
-    type: 'input',
-    message: 'Tell me all about it...'
+    type: "input",
+    message: "Tell me all about it...",
   },
   {
-    name: 'framework',
-    type: 'list',
+    name: "framework",
+    type: "list",
     choices: [
-      { name: 'Polymer 2', value: 'polymer' },
-      { name: 'No framework', value: 'none' }
+      { name: "Polymer 2", value: "polymer" },
+      { name: "No framework", value: "none" },
     ],
     required: true,
-    message: 'Which WC framework do you want to include?'
+    message: "Which WC framework do you want to include?",
   },
   {
-    name: 'includeTemplate',
+    name: "includeTemplate",
     when: isPolymer,
-    type: 'confirm',
-    message: 'Will your element need a shadow DOM template?',
-    default: true
+    type: "confirm",
+    message: "Will your element need a shadow DOM template?",
+    default: true,
   },
   {
-    name: 'author',
+    name: "author",
     when: isStandalone,
-    type: 'input',
+    type: "input",
     required: true,
-    message: 'Who wrote it?'
+    message: "Who wrote it?",
   },
   {
-    name: 'github',
+    name: "github",
     when: isStandalone,
-    type: 'input',
+    type: "input",
     required: true,
-    message: 'What GitHub org will it live in?'
-  }
+    message: "What GitHub org will it live in?",
+  },
 ];
 
 class GeneratorWebComponent extends Yeoman {
+  constructor(args, opts) {
+    super(args, opts);
+    this.argument("name", { type: String, required: true });
+  }
 
-  prompting() {
+  //};
+  /*prompting() {
     const done = this.async();
 
     return this.prompt(PROMPTS).then(answers => {
       this.props = answers;
       done();
     });
-  }
+  }*/
 
   default() {
+    this.props = {
+      ...this.props,
+      ...this.options,
+      type: "standalone",
+    };
+
     const { name, type } = this.props;
 
-    // Build component class
+    //Build component class
     this.props.class = generateClassName(name);
 
-    // Ensure component is in its own directory if standalone
-    if (type === 'standalone' && path.basename(this.destinationPath()) !== name) {
-      this.log(`Your component should be in a '${name}' folder, I'll create it for you`);
-      mkdirp(name);
-      this.destinationRoot(this.destinationPath(name));
+    //Ensure component is in its own directory if standalone
+
+    const baseDir = this.config.get("rootDirectory") || "./";
+
+    if (
+      type === "standalone" &&
+      path.basename(this.destinationPath()) !== name
+    ) {
+      this.log(
+        `Your component should be in a '${baseDir}${name}' folder, I'll create it for you`
+      );
+      this.props.outputDir = path.join(baseDir, name);
+      mkdirp(this.props.outputDir);
+      //this.destinationRoot(this.destinationPath(name));
     }
   }
 
   writing() {
     const { name } = this.props;
-
     // Write & rename element src
+    /*
+     *this.fs.copyTpl(
+     *  this.templatePath('element.html'),
+     *  this.destinationPath(`${name}.html`),
+     *  this
+     *);
+     */
     this.fs.copyTpl(
-      this.templatePath('element.html'),
-      this.destinationPath(`${name}.html`),
+      this.templatePath("element.js"),
+      this.destinationPath(path.join(this.props.outputDir, `${name}.js`)),
       this
     );
 
@@ -116,22 +143,25 @@ class GeneratorWebComponent extends Yeoman {
 
     // Write & rename element test
     this.fs.copyTpl(
-      this.templatePath('element-test.html'),
+      this.templatePath("element-test.html"),
       this.destinationPath(`test/${name}.html`),
       this
     );
 
     // Write everything else
     this.fs.copyTpl(
-      glob.sync(this.templatePath('!(element.html|element-test.html)'), { dot: true }),
-      this.destinationPath(),
+      glob.sync(
+        this.templatePath("!(element.html|element.js|element-test.html)"),
+        { dot: true }
+      ),
+      this.destinationPath(path.join(this.props.outputDir)),
       this
     );
   }
 
-  install() {
+  /*install() {
     isStandalone(this.props) && this.installDependencies();
-  }
+  }*/
 }
 
 module.exports = GeneratorWebComponent;
