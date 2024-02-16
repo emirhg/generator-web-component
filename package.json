@@ -1,17 +1,17 @@
 {
-  "name": "generator-web-component",
-  "version": "2.1.0",
-  "description": "Quickly scaffold web components with Yeoman",
-  "license": "MIT",
-  "main": "app/index.js",
-  "repository": "seaneking/generator-web-component",
+  "name": "@emirhg/generator-web",
+  "version": "0.0.1",
+  "description": "Quickly scaffold web components with Yeoman. Originally forked from madeleineostoja/generator-web-component",
+  "license": "GPL-3.0-only",
+  "main": "component/index.js",
+  "repository": "emirhg/generator-web-component",
   "author": {
-    "name": "Sean King",
-    "email": "sean@seaneking.org",
-    "url": "https://twitter.com/seaneking"
+    "name": "Emir Herrera",
+    "email": "emir.herrera@gmail.com",
+    "url": "https://emirhg.github.io/"
   },
   "files": [
-    "app"
+    "component"
   ],
   "keywords": [
     "yeoman-generator",
