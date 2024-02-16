@@ -2,6 +2,11 @@
 
 Quickly scaffold lightweight web components with [Yeoman][yeoman], with just what's needed and none of the cruft. Built against the v1 Web Components spec.
 
+madeleineostoja/generator-web-component was archived in 2000
+
+Modular Web Component definition. JavaScript and CSS are implemented different in splitted files.
+Polymer support removed.
+
 ### Contents
 
 <!-- MarkdownTOC -->
