@@ -9,7 +9,7 @@ const sourcePath = path.join(__dirname, "src/view/"); // => /path/to/src
 const config = {
   target: "web",
   entry: {
-    index: "./src/view/index.pug",
+    index: "./src/index.js",
   },
   output: {
     path: path.resolve(__dirname, OUTPUT_DIR),
@@ -84,6 +84,9 @@ module.exports = () => {
     config.mode = "production";
   } else {
     config.mode = "development";
+    config.entry = {
+      index: "./src/index.pug",
+    };
   }
   return config;
 };

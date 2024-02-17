@@ -130,11 +130,13 @@ class GeneratorWebComponent extends Yeoman {
      *  this
      *);
      */
-    this.fs.copyTpl(
-      this.templatePath("src/element.js"),
-      this.destinationPath(path.join(this.props.outputDir, `src/${name}.js`)),
-      this
-    );
+    /*
+     *this.fs.copyTpl(
+     *  this.templatePath("src/element.js"),
+     *  this.destinationPath(path.join(this.props.outputDir, `src/${name}.js`)),
+     *  this
+     *);
+     */
 
     // Write additional files only for standalone elements
     if (!isStandalone(this.props)) {
@@ -152,15 +154,17 @@ class GeneratorWebComponent extends Yeoman {
 
     // Write everything else
     this.fs.copyTpl(
-      glob.sync(this.templatePath("!(src)"), { dot: true }),
+      glob.sync(this.templatePath("**/*.*"), { dot: true }),
       this.destinationPath(path.join(this.props.outputDir)),
       this
     );
-    this.fs.copyTpl(
-      glob.sync(this.templatePath("src", "!(element.js)"), { dot: true }),
-      this.destinationPath(path.join(this.props.outputDir, "src")),
-      this
-    );
+    /*
+     *this.fs.copyTpl(
+     *  glob.sync(this.templatePath("src", "!(element.js)"), { dot: true }),
+     *  this.destinationPath(path.join(this.props.outputDir, "src")),
+     *  this
+     *);
+     */
   }
 
   install() {
