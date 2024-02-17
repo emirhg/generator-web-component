@@ -4,12 +4,12 @@ const PugPlugin = require("pug-plugin");
 const isProduction = process.env.NODE_ENV == "production";
 const OUTPUT_DIR = "dist";
 
-const sourcePath = path.join(__dirname, "src/view/"); // => /path/to/src
+const sourcePath = path.join(__dirname, `${sourcePath}/`);
 
 const config = {
   target: "web",
   entry: {
-    index: "./src/index.js",
+    index: `${sourcePath}/index.js`,
   },
   output: {
     path: path.resolve(__dirname, OUTPUT_DIR),
@@ -17,9 +17,9 @@ const config = {
   },
   resolve: {
     alias: {
-      assets: path.resolve(__dirname, "src/assets/"),
-      theme: path.resolve(__dirname, "src/theme/"),
-      style: path.resolve(__dirname, "src/theme/style.sass"),
+      assets: path.resolve(__dirname, `${sourcePath}/assets/`),
+      theme: path.resolve(__dirname, `${sourcePath}/theme/`),
+      style: path.resolve(__dirname, `${sourcePath}/theme/style.sass`),
     },
   },
   devServer: {
@@ -30,7 +30,7 @@ const config = {
       directory: path.join(__dirname, OUTPUT_DIR),
     },
     watchFiles: {
-      paths: ["src/**/*.*"],
+      paths: [`${sourcePath}/**/*.*`],
       options: {
         usePolling: true,
       },
