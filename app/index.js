@@ -163,9 +163,10 @@ class GeneratorWebComponent extends Yeoman {
     );
   }
 
-  /*install() {
-    isStandalone(this.props) && this.installDependencies();
-  }*/
+  install() {
+    process.chdir(this.props.outputDir);
+    this.installDependencies({ bower: false });
+  }
 }
 
 module.exports = GeneratorWebComponent;
