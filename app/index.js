@@ -131,8 +131,8 @@ class GeneratorWebComponent extends Yeoman {
      *);
      */
     this.fs.copyTpl(
-      this.templatePath("element.js"),
-      this.destinationPath(path.join(this.props.outputDir, `${name}.js`)),
+      this.templatePath("src/element.js"),
+      this.destinationPath(path.join(this.props.outputDir, `src/${name}.js`)),
       this
     );
 
@@ -152,11 +152,13 @@ class GeneratorWebComponent extends Yeoman {
 
     // Write everything else
     this.fs.copyTpl(
-      glob.sync(
-        this.templatePath("!(element.html|element.js|element-test.html)"),
-        { dot: true }
-      ),
+      glob.sync(this.templatePath("!(src)"), { dot: true }),
       this.destinationPath(path.join(this.props.outputDir)),
+      this
+    );
+    this.fs.copyTpl(
+      glob.sync(this.templatePath("src", "!(element.js)"), { dot: true }),
+      this.destinationPath(path.join(this.props.outputDir, "src")),
       this
     );
   }
