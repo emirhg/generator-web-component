@@ -18,7 +18,8 @@ class <%= props.class %> extends HTMLElement {
   connectedCallback() {
     // Create a shadow root
     const shadow = this.attachShadow({ mode: "open" });
-    shadow.innerHTML = template;
+    shadow.innerHTML = `<style>${style}</style>`;
+    shadow.innerHTML += template;
   }
 
   disconnectedCallback() {
