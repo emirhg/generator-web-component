@@ -2,14 +2,17 @@ const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const isProduction = process.env.NODE_ENV == "production";
+const RELATIVE_SRC_PATH = "src";
 const OUTPUT_DIR = "dist";
+const DEFAULT_MODULE_TARGET = "web";
 
-const sourcePath = path.join(__dirname, "src");
+const sourcePath = path.join(__dirname, RELATIVE_SRC_PATH);
 
 const config = {
-  target: "web",
+  context: path.resolve(__dirname, RELATIVE_SRC_PATH),
+  target: DEFAULT_MODULE_TARGET,
   entry: {
-    index: `${sourcePath}/index.js`,
+    index: "./index.js",
   },
   output: {
     path: path.resolve(__dirname, OUTPUT_DIR),
@@ -77,7 +80,7 @@ module.exports = () => {
     config.mode = "development";
     config.plugins.push(
       new HtmlWebpackPlugin({
-        template: "src/index.pug",
+        template: "index.pug",
         chunks: ["index"],
       })
     );
