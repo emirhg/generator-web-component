@@ -1,6 +1,7 @@
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const isProduction = process.env.NODE_ENV == "production";
 const RELATIVE_SRC_PATH = "src";
 const OUTPUT_DIR = "dist";
@@ -41,6 +42,20 @@ const config = {
   },
   plugins: [
     new CleanWebpackPlugin(),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: "../README.md",
+        },
+        {
+          from: "../package.json",
+          transform: (_) => {
+            const { devDependencies, scripts, ...packageJson } = JSON.parse(_);
+            return JSON.stringify(packageJson, null, 2);
+          },
+        },
+      ],
+    }),
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
   ],
