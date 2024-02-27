@@ -1,10 +1,10 @@
 const path = require("path");
-const PugPlugin = require("pug-plugin");
-
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const isProduction = process.env.NODE_ENV == "production";
 const OUTPUT_DIR = "dist";
 
-const sourcePath = path.join(__dirname, `${sourcePath}/`);
+const sourcePath = path.join(__dirname, "src");
 
 const config = {
   target: "web",
@@ -13,7 +13,7 @@ const config = {
   },
   output: {
     path: path.resolve(__dirname, OUTPUT_DIR),
-    filename: "[name].[contenthash:8][ext]",
+    filename: "[name].js",
   },
   resolve: {
     alias: {
@@ -37,17 +37,7 @@ const config = {
     },
   },
   plugins: [
-    new PugPlugin({
-      verbose: true,
-      pretty: true,
-      js: {
-        filename: "[name].[contenthash:8].js",
-      },
-      css: {
-        filename: "[name].[contenthash:8].css",
-      },
-    }),
-
+    new CleanWebpackPlugin(),
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
   ],
@@ -55,18 +45,19 @@ const config = {
     rules: [
       {
         test: /\.pug$/,
-        loader: PugPlugin.loader,
-        options: {
-          method: "render",
-          data: {
-            // Pass isProduction variable to inject HRM code when is on development
-            isProduction,
+        use: [
+          {
+            loader: "raw-loader",
+            options: {
+              esModule: false,
+            },
           },
-        },
+          "pug-html-loader",
+        ],
       },
       {
         test: /\.s[ac]ss$/i,
-        use: ["css-loader", "sass-loader"],
+        use: ["style-loader", "css-loader", "sass-loader"],
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
@@ -84,9 +75,12 @@ module.exports = () => {
     config.mode = "production";
   } else {
     config.mode = "development";
-    config.entry = {
-      index: "./src/index.pug",
-    };
+    config.plugins.push(
+      new HtmlWebpackPlugin({
+        template: "src/index.pug",
+        chunks: ["index"],
+      })
+    );
   }
   return config;
 };

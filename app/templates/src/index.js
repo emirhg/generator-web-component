@@ -1,4 +1,6 @@
 const template = require("./html-template.pug");
+const style = require("./style.sass");
+
 class <%= props.class %> extends HTMLElement {
 
   constructor(){
